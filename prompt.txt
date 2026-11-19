@@ -1,0 +1,8 @@
+Promptok:
+Ehhez az apphoz generálj nekem minimum 2 unit tesztet
+Még 1-2 unit tesztet generálj
+Egy olyan tesztet is generálj ahol azt teszteljük, hogy az applikáció hibásan elfogad-e törteket!
+Generálj 2-3 viselkedést leíró tesztet (pl. Gherkin szintaxissal, a behave vagy pytest-bdd keretrendszerhez).
+Egy olyan forgató könyvet is generálj ahol nem üres kezdeti állapotból indulunk!
+
+https://chatgpt.com/share/6afe3d80-f288-83ed-82a8-cffdd09b1d45

@@ -1,0 +1,9 @@
+# Python 3.10+ recommended
+Flask>=3.1,<4
+pytest>=8,<10
+pytest-bdd>=8,<10
+selenium>=4.30,<5
+requests>=2.31,<3
+locust>=2.47,<3
+waitress>=3.0,<4
+

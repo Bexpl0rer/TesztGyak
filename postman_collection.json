@@ -1,0 +1,214 @@
+{
+  "info": {
+    "_postman_id": "b40fea0e-94a4-4df5-b220-b83734d52cae",
+    "name": "Szamosszegzo API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59280519",
+    "_collection_link": "https://go.postman.co/collection/59280519-b40fea0e-94a4-4df5-b220-b83734d52cae?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Kezdeti osszeg lekerdezes",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"GET kérés sikeres (200)\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Az összeg egész szám\", function () {\r\n    pm.expect(Number.isInteger(pm.response.json().sum)).to.be.true;\r\n});\r\n\r\npm.collectionVariables.set(\r\n    \"kezdoOsszeg\",\r\n    pm.response.json().sum\r\n);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/sum",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "sum"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Pozitiv szam bekuldese",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"POST kérés sikeres (201)\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"A beküldött szám és az összeg helyes\", function () {\r\n    const data = pm.response.json();\r\n    const kezdo = Number(pm.collectionVariables.get(\"kezdoOsszeg\"));\r\n\r\n    pm.expect(data.number).to.eql(10);\r\n    pm.expect(data.sum).to.eql(kezdo + 10);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"number\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/numbers",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "numbers"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Negativ szam bekuldese",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"POST kérés sikeres (201)\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Negatív szám helyes kezelése\", function () {\r\n    const data = pm.response.json();\r\n    const kezdo = Number(pm.collectionVariables.get(\"kezdoOsszeg\"));\r\n\r\n    pm.expect(data.number).to.eql(-5);\r\n    pm.expect(data.sum).to.eql(kezdo + 5);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"number\": -5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/numbers",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "numbers"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Tort szam elutasitasa",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Tört szám elutasítva (400)\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Hibaüzenet megfelelő\", function () {\r\n    const data = pm.response.json();\r\n\r\n    pm.expect(data.error).to.eql(\"Ervenytelen szam!\");\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"number\": 2.5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/numbers",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "numbers"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Osszeg ellenorzese",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"GET kérés sikeres (200)\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"A tört szám nem változtatta meg az összeget\", function () {\r\n    const data = pm.response.json();\r\n    const kezdo = Number(pm.collectionVariables.get(\"kezdoOsszeg\"));\r\n\r\n    pm.expect(data.sum).to.eql(kezdo + 5);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/sum",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "sum"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "kezdoOsszeg",
+      "value": ""
+    }
+  ]
+}

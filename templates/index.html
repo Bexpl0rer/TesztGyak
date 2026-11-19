@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Számösszegző</title>
+</head>
+<body>
+    <h1>Számösszegző alkalmazás</h1>
+
+    <p>Adj meg egy egész számot!</p>
+
+    <form id="number-form">
+        <input type="number" id="number-input" step="1" required>
+        <button type="submit" id="submit-button">Beküldés</button>
+    </form>
+
+    <h2>Aktuális összeg: <span id="sum-value">0</span></h2>
+    <p id="status-message"></p>
+
+    <script>
+        const form = document.getElementById("number-form");
+        const input = document.getElementById("number-input");
+        const sumValue = document.getElementById("sum-value");
+        const status = document.getElementById("status-message");
+
+        async function getSum() {
+            const response = await fetch("/api/sum");
+            const data = await response.json();
+            sumValue.textContent = data.sum;
+        }
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const number = Number(input.value);
+
+            if (!Number.isSafeInteger(number)) {
+                status.textContent = "Érvénytelen szám!";
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/numbers", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ number: number })
+                });
+
+                if (response.ok) {
+                    await getSum();
+                    status.textContent = "Sikeres beküldés!";
+                    input.value = "";
+                } else {
+                    status.textContent = "Hiba a beküldés során!";
+                }
+            } catch (error) {
+                status.textContent = "Nem sikerült kapcsolódni a szerverhez.";
+            }
+        });
+
+        getSum();
+    </script>
+</body>
+</html>
